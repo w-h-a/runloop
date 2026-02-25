@@ -30,16 +30,18 @@ const (
 )
 
 type Run struct {
-	ID          string
-	Goal        string
-	Status      RunStatus
-	ModelConfig ModelConfig
-	Tools       []ToolDefinition
-	Steps       []Step
-	MaxSteps    int
-	TokenBudget int
-	CreatedAt   time.Time
-	Error       string
+	ID              string
+	Goal            string
+	Status          RunStatus
+	ModelConfig     ModelConfig
+	Tools           []ToolDefinition
+	Steps           []Step
+	MaxSteps        int
+	TokenBudget     int
+	TotalTokensUsed int
+	CreatedAt       time.Time
+	Error           string
+	FailedAtStepID  string
 }
 
 type Step struct {

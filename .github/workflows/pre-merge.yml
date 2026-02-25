@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  unit-test:
+    name: Run Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+      - name: Run Unit Tests
+        run: go clean -testcache && go test -v ./... 
