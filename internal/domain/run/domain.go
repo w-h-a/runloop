@@ -69,5 +69,4 @@ type ToolDefinition struct {
 	Name        string
 	Description string
 	InputSchema json.RawMessage
-	Endpoint    string
 }
