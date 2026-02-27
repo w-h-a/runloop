@@ -6,25 +6,23 @@ When LLM calls are expensive, non-deterministic, and slow, that means lost progr
 
 ## Solution
 
-Every state transition — LLM call, tool call, result, failure — is an immutable event appended to a durable log. Current state is derived by replaying events, never stored as a mutable snapshot. Runs are first-class resources with identity, lifecycle, and a query API.
+Every state transition — LLM call, tool call, result, failure — is an immutable event appended to a durable log. Current state is derived by replaying events, never stored as a mutable snapshot. Runs are first-class resources with identity, lifecycle, and observability built into the data model.
 
 ## Architecture
 
 ```mermaid
 graph TB
-    Client[REST Client] -->|POST /runs, GET /runs/:id| API[HTTP Handlers]
-    API --> RunSvc[Run Service]
-    RunSvc --> Executor[Executor]
-    RunSvc --> ES[Event Store]
-
+    DM[Delivery Mechanism] --> Executor
     Executor --> LLM[LLM Client]
     Executor --> TD[Tool Dispatcher]
-    Executor --> ES
+    Executor --> ES[Event Store]
 
-    LLM -->|HTTP| OpenAI[OpenAI-compatible API]
-    TD -->|HTTP| Tools[Tool Endpoints]
+    LLM --> OpenAI[OpenAI-compatible API]
+    TD --> Tools[Tools]
     ES -->|append events| DB[(SQLite)]
 ```
+
+The domain core — Run, Step, event sourcing, state reconstruction — is delivery-mechanism-independent. The delivery mechanism is a thin layer that wires dependencies and invokes the executor.
 
 ## Usage
 
